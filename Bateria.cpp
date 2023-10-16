@@ -20,7 +20,9 @@ private:
 
 		Result = SetupDiGetClassDevs(&GUID_DEVCLASS_BATTERY, 0, 0, DIGCF_PRESENT | DIGCF_DEVICEINTERFACE);
 		if (Result == INVALID_HANDLE_VALUE)
-			cout << "Identificador inválido para a busca selecionada.." << GetLastError();
+		{
+			cout << "Identificador invÃ¡lido para a busca selecionada.." << GetLastError();
+		}
 		else
 		{
 			bRetorno = true;
@@ -58,13 +60,17 @@ public:
 					Bateria = CreateFile(Data.DevicePath, GENERIC_READ, FILE_SHARE_READ,
 						0, OPEN_EXISTING, 0, 0);
 					if (Bateria == INVALID_HANDLE_VALUE)
-						cout << "Identificador inválido para o tipo de operação selecionada..";
+					{
+						cout << "Identificador invÃ¡lido para o tipo de operaÃ§Ã£o selecionada..";
+					}
 					else
+					{
 						ObterInformacoesDeBateria();
+					}
 				}
 				else
 				{
-					cout << "Ocorreu um erro durante a operação de busca.." << GetLastError();
+					cout << "Ocorreu um erro durante a operaÃ§Ã£o de busca.." << GetLastError();
 				}
 			}
 		}
@@ -83,9 +89,13 @@ public:
 			0);
 
 		if (Informacoes2.Capabilities == BATTERY_CAPACITY_RELATIVE)
+		{
 			cout << "Capacidade relativa..\n";
+		}
 		else if (Informacoes2.Capabilities == BATTERY_SYSTEM_BATTERY)
+		{
 			cout << "Esta bateria pode fornecer energia geral para o sistema..\n";
+		}
 
 		BATTERY_WAIT_STATUS OutrasInformacoes;
 		OutrasInformacoes.BatteryTag = Informacoes.BatteryTag;
@@ -94,32 +104,40 @@ public:
 		DeviceIoControl(Bateria, IOCTL_BATTERY_QUERY_STATUS, &OutrasInformacoes, sizeof(OutrasInformacoes), &
 			Status, sizeof(Status), &BytesRetornados, 0);
 
-		if (Status.PowerState & BATTERY_POWER_ON_LINE)
-			cout << "O computador está em uma conexão direta com a fonte, sem descarregar a bateria.\n";
-		else if (Status.PowerState & BATTERY_CHARGING)
-			cout << "A bateria está carregando..\n";
-		else if (Status.PowerState & BATTERY_DISCHARGING)
-			cout << "A bateria está descarregando..\n";
-		else
-			cout << "A bateria precisa de sua atenção, pode estar com mal funcionamento..\n";
+		if (Status.PowerState & BATTERY_POWER_ON_LINE){
+			cout << "O computador estÃ¡ em uma conexÃ£o direta com a fonte, sem descarregar a bateria.\n";}
+		else if (Status.PowerState & BATTERY_CHARGING){
+			cout << "A bateria estÃ¡ carregando..\n";}
+		else if (Status.PowerState & BATTERY_DISCHARGING){
+			cout << "A bateria estÃ¡ descarregando..\n";}
+		else{
+			cout << "A bateria precisa de sua atenÃ§Ã£o, pode estar com mal funcionamento..\n";}
 
 		if (Informacoes2.Technology == 0)
-			cout << "Bateria não recarregável, alcalina.\n";
+		{
+			cout << "Bateria nÃ£o recarregÃ¡vel, alcalina.\n";
+		}
 		else
-			cout << "Bateria recarregável.\n";
+		{
+			cout << "Bateria recarregÃ¡vel.\n";
+		}
 
-		cout << "Substância da bateria: " << Informacoes2.Chemistry << '\n';
+		cout << "SubstÃ¢ncia da bateria: " << Informacoes2.Chemistry << '\n';
 
 		long Calcular1 = (double)Status.Capacity / Informacoes2.FullChargedCapacity * 1000;
 		cout << "Capacidade da bateria em kWh ( Carregada 100% ): " << Calcular1 << " kWh.\n";
 
 		if (Informacoes2.CycleCount == 0)
-			cout << "Ciclos de carga: Não disponível.\n";
+		{
+			cout << "Ciclos de carga: NÃ£o disponÃ­vel.\n";
+		}
 		else
+		{
 			cout << "Ciclos de carga: " << Informacoes2.CycleCount << " ciclos.\n";
+		}
 
-		//Use alguma cálculadora ciêntifica para converter ( mWh ) Megawatt-hora para ( kWh ) Quilowatt-hora.
-		//Este cálculo obtém apenas o valor em ( mWh ).
+		//Use alguma cÃ¡lculadora ciÃªntifica para converter ( mWh ) Megawatt-hora para ( kWh ) Quilowatt-hora.
+		//Este cÃ¡lculo obtÃ©m apenas o valor em ( mWh ).
 		long Calcular = (double)Status.Capacity / Informacoes2.FullChargedCapacity;
 		cout << "Capacidade: " << Calcular << " mWh. ( Megawatt-hora ).\n";
 
@@ -128,11 +146,13 @@ public:
 			cout << "Voltagem desconhecida..\n";
 		}
 		else
+		{
 			cout << "Voltagem: " << Status.Voltage << " mv ( Millivolts )\n";
+		}
 
 		SetupDiDestroyDeviceInfoList(Result);
 
-		//Iremos finalizar o identificador de bateria, pois não será mais necessário.
+		//Iremos finalizar o identificador de bateria, pois nÃ£o serÃ¡ mais necessÃ¡rio.
 		CloseHandle(Bateria);
 
 		system("pause");
@@ -143,7 +163,7 @@ public:
 int main()
 {
 
-	cout << "O assistente está executando operações de busca de informações sobre bateria...\n\n";
+	cout << "O assistente estÃ¡ executando operaÃ§Ãµes de busca de informaÃ§Ãµes sobre bateria...\n\n";
 
 	Funcoes.EnumerarBaterias();
 
