@@ -18,9 +18,13 @@ public:
 		GetSystemPowerStatus(&Energia);
 		
 		if (Energia.ACLineStatus == 0)
+		{
 			cout << "Desconectado da fonte de energia..\n";
+		}
 		else
+		{
 			cout << "Conectado a fonte de energia..\n";
+		}
 
 		switch (Energia.BatteryFlag)
 		{
@@ -41,9 +45,13 @@ public:
 		}
 
 		if (Energia.SystemStatusFlag == 0)
+		{
 			cout << "Economia: Desativada..\n";
+		}
 		else
+		{
 			cout << "Economia: Ativa..\n";
+		}
 
 		cout << "Percentual de bateria: " << Energia.BatteryLifePercent * 1 << "% restantes..\n";
 	}
