@@ -43,7 +43,7 @@ public:
 			for (int i = 0; i < 1; i++)
 			{
 				SP_DEVICE_INTERFACE_DATA Informacao;
-				Informacao.cbSize = sizeof(Informacao);
+				Informacao.cbSize = sizeof(SP_DEVICE_INTERFACE_DATA);
 
 				SetupDiEnumDeviceInterfaces(Result, 0, &GUID_DEVCLASS_BATTERY, i, &Informacao);
 
@@ -124,7 +124,7 @@ public:
 
 		cout << "Substância da bateria: " << Informacoes2.Chemistry << '\n';
 
-		long Calcular1 = (double)Status.Capacity / Informacoes2.FullChargedCapacity * 1000;
+		ULONG Calcular1 = (double)Status.Capacity / Informacoes2.FullChargedCapacity * 1000;
 		cout << "Capacidade da bateria em kWh ( Carregada 100% ): " << Calcular1 << " kWh.\n";
 
 		if (Informacoes2.CycleCount == 0)
@@ -138,7 +138,7 @@ public:
 
 		//Use alguma cálculadora ciêntifica para converter ( mWh ) Megawatt-hora para ( kWh ) Quilowatt-hora.
 		//Este cálculo obtém apenas o valor em ( mWh ).
-		long Calcular = (double)Status.Capacity / Informacoes2.FullChargedCapacity;
+		ULONG Calcular = (double)Status.Capacity / Informacoes2.FullChargedCapacity;
 		cout << "Capacidade: " << Calcular << " mWh. ( Megawatt-hora ).\n";
 
 		if (Status.Voltage == BATTERY_UNKNOWN_VOLTAGE)
